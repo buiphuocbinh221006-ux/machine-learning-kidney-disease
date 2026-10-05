@@ -17,3 +17,6 @@ ENV/
 build_notebook.py
 test_run.py
 xem_file_pkl.py
+
+# VS Code local settings
+.vscode/
