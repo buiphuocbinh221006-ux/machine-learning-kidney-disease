@@ -50,6 +50,7 @@ Trình duyệt sẽ tự động mở tại địa chỉ `http://localhost:8501`
 ```
 ├── data/
 │   └── clean_KidneyDisease_data.csv    # Dữ liệu bệnh thận đã làm sạch
+├── DATA_DICTIONARY.md                  # Mô tả biến, đơn vị và giới hạn của mã hóa
 ├── outputs/
 │   ├── best_model.pkl                  # Mô hình được chọn bằng cross-validation
 │   ├── model_metadata.json             # Cấu hình và metrics của lần chạy gần nhất
@@ -72,4 +73,4 @@ Trình duyệt sẽ tự động mở tại địa chỉ `http://localhost:8501`
 
 ## 🧾 Khả năng tái lập dữ liệu
 
-`data/clean_KidneyDisease_data.csv` là dữ liệu đã xử lý. Thư mục hiện chưa kèm dữ liệu thô, mã tạo CSV này hoặc data dictionary đầy đủ cho các mã phân loại. Trước khi chốt báo cáo, cần bổ sung nguồn và quy tắc làm sạch/mã hóa, đồng thời xác nhận mọi bước học tham số tiền xử lý chỉ dùng tập train.
+`data/clean_KidneyDisease_data.csv` là dữ liệu đã xử lý. `DATA_DICTIONARY.md` mô tả các thuộc tính và chỉ ra rõ những mã phân loại chưa thể ánh xạ ngược vì project chưa kèm dữ liệu thô hay script tiền xử lý. Cần lấy quy tắc mã hóa từ nguồn dữ liệu trước khi giải thích các mã đó thành nhãn; đồng thời xác nhận mọi bước học tham số tiền xử lý chỉ dùng tập train.
