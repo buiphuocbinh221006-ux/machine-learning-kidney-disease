@@ -15,7 +15,6 @@ st.set_page_config(
 # Đường dẫn tài nguyên
 MODEL_PATH = os.path.join(os.path.dirname(__file__), 'outputs', 'best_model.pkl')
 METADATA_PATH = os.path.join(os.path.dirname(__file__), 'outputs', 'model_metadata.json')
-DT_IMG_PATH = os.path.join(os.path.dirname(__file__), 'outputs', 'decision_tree_structure.png')
 FI_IMG_PATH = os.path.join(os.path.dirname(__file__), 'outputs', 'feature_importance.png')
 
 def load_model():
@@ -84,15 +83,12 @@ with st.sidebar:
             set_preset(PRESET_NORMAL)
             st.rerun()
 
-    st.markdown("---")
-    st.caption("👨‍💻 **Thành viên thực hiện:**\n- TV1: Data Analyst & Thống kê\n- TV2: Core ML Engineer (Tree Models)\n- TV3: AI Evaluator & XAI")
 
 # ================= MAIN PAGE =================
 st.title("🩺 Demo phân loại dữ liệu bệnh thận mạn")
-st.warning("Đồ án học thuật, không phải công cụ chẩn đoán hay tư vấn y tế. Các xác suất mô hình chưa được hiệu chuẩn lâm sàng.")
 st.markdown("Nhập các đặc trưng đã được mã hóa theo đúng quy ước của bộ dữ liệu đã xử lý để xem đầu ra minh họa của mô hình.")
 
-tab1, tab2, tab3 = st.tabs(["📋 Đầu vào & Kết quả mô hình", "📊 Trực quan mô hình", "ℹ️ Giới thiệu"])
+tab1, tab2 = st.tabs(["📋 Đầu vào & Kết quả mô hình", "📊 Trực quan mô hình"])
 
 with tab1:
     st.subheader("1. Thông tin xét nghiệm của bệnh nhân")
@@ -122,7 +118,7 @@ with tab1:
         sg = st.number_input("Mã tỷ trọng nước tiểu (sg: 0-4)", min_value=0, max_value=4, value=int(curr.get("sg", 2)))
         al = st.number_input("Mức Albumin niệu (al: 0-5)", min_value=0, max_value=5, value=int(curr.get("al", 0)))
         su = st.number_input("Mức Đường niệu (su: 0-5)", min_value=0, max_value=5, value=int(curr.get("su", 0)))
-        st.caption("Các biến phân loại hiển thị theo mã số trong CSV đã xử lý. Đối chiếu data dictionary của TV1 trước khi diễn giải.")
+        st.caption("Các biến phân loại hiển thị theo mã số trong CSV đã xử lý. Đối chiếu data dictionary trước khi diễn giải.")
         rbc = st.selectbox("Mã rbc", [0, 1], index=int(curr.get("rbc", 1)))
         pc = st.selectbox("Mã pc", [0, 1], index=int(curr.get("pc", 1)))
         pcc = st.selectbox("Mã pcc", [0, 1], index=int(curr.get("pcc", 0)))
@@ -189,36 +185,10 @@ with tab2:
     if not metadata:
         st.warning("Các hình hiện có thuộc lần chạy cũ. Chạy toàn bộ `main.ipynb` để cập nhật mô hình và biểu đồ trước khi xem.")
     else:
-        st.subheader("🔍 Cấu trúc mô hình & độ quan trọng đặc trưng")
-        st.markdown("Các biểu đồ minh họa mô hình đã chọn và cách mô hình xếp hạng đặc trưng; chúng không chứng minh quan hệ nhân quả.")
-    
-        col_v1, col_v2 = st.columns([1, 1])
-    
-        with col_v1:
-            st.markdown("##### 🌳 Cấu trúc Decision Tree")
-            if os.path.exists(DT_IMG_PATH):
-                st.image(DT_IMG_PATH, caption="Cây baseline được cắt ở độ sâu hiển thị 3.", use_container_width=True)
-            else:
-                st.warning("Chưa tìm thấy file ảnh `decision_tree_structure.png`")
-            
-        with col_v2:
-            st.markdown("##### 📊 Feature Importance")
-            if os.path.exists(FI_IMG_PATH):
-                st.image(FI_IMG_PATH, caption="Top đặc trưng được mô hình đã chọn xếp hạng.", use_container_width=True)
-            else:
-                st.warning("Chưa tìm thấy file ảnh `feature_importance.png`")
+        st.subheader("📊 Feature Importance")
+        st.markdown("Biểu đồ xếp hạng đặc trưng theo mô hình đã chọn; đây không phải quan hệ nhân quả.")
+        if os.path.exists(FI_IMG_PATH):
+            st.image(FI_IMG_PATH, caption="Top đặc trưng được mô hình đã chọn xếp hạng.", use_container_width=True)
+        else:
+            st.warning("Chưa tìm thấy file ảnh `feature_importance.png`")
 
-with tab3:
-    st.subheader("📖 Thông Tin Dự Án Học Máy")
-    st.markdown("""
-    * **Tên đề tài:** Chẩn đoán Bệnh Thận Mạn tính (Chronic Kidney Disease Classification)
-    * **Bộ dữ liệu:** Kaggle / UCI Machine Learning Repository (397 mẫu bệnh nhân, 24 đặc trưng y tế).
-    * **Phân bổ vai trò:**
-      * **Thành viên 1:** Khám phá & Trực quan dữ liệu (EDA), Xử lý khuyết thiếu, Mã hóa biến, Mô hình Logistic Regression & Naive Bayes.
-      * **Thành viên 2:** Kỹ thuật chia tập Stratified, Huấn luyện nhóm mô hình Cây (Decision Tree, Random Forest, LightGBM), Tối ưu siêu tham số & Đóng gói mô hình.
-      * **Thành viên 3:** Chuẩn hóa dữ liệu (Scaling), Mô hình khoảng cách (KNN, SVM), Đánh giá tổng hợp ROC Curve & Giải thích mô hình (SHAP/LIME).
-    """)
-    if metadata:
-        st.success(f"Mô hình đang nạp: **{metadata['model_name']}**. Chỉ số được tạo từ lần chạy notebook gần nhất.")
-    else:
-        st.warning("Chưa có metadata cho lần chạy hiện tại. Chạy toàn bộ notebook để cập nhật mô hình, chỉ số và ứng dụng.")
